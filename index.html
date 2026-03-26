@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Mastery Game 100</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Dynamic animated backgrounds -->
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+    <div class="bg-shape shape-3"></div>
+
+    <div class="container" id="app">
+        <!-- Main header / Navigation -->
+        <header class="glass-header">
+            <div class="logo">
+                <i class="fa-solid fa-graduation-cap"></i> English <span>Mastery</span>
+            </div>
+            <div class="score-board">
+                <i class="fa-solid fa-star" style="color: #ffd700;"></i>
+                <span id="scoreDisplay">0</span> XP
+            </div>
+        </header>
+
+        <!-- Main Screen: Level Selector -->
+        <main id="levelSelector" class="screen active">
+            <div class="hero-section glass-panel">
+                <div class="hero-text">
+                    <h1>Journey to English Mastery!</h1>
+                    <p>Conquer 100 levels. 10,000 sentences. Become fluent.</p>
+                </div>
+                <!-- The image the user requested -->
+                <img src="image.png" alt="Hero Image" class="hero-img" onerror="this.src='https://images.unsplash.com/photo-1546410531-bb4caa6b424d?q=80&w=800&auto=format&fit=crop';">
+            </div>
+
+            <h2 class="section-title">Select Level</h2>
+            <div class="level-grid" id="levelGrid">
+                <!-- Javascript will populate 1-100 levels here -->
+            </div>
+        </main>
+
+        <!-- Game Screen: Gameplay -->
+        <main id="gameScreen" class="screen">
+            <div class="game-header">
+                <button class="btn-back" onclick="goBack()"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                <div class="level-badge">Level <span id="currentLevelSpan">1</span></div>
+                <div class="progress-container">
+                    <span id="progressText">1/100</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-board glass-panel">
+                <div class="sentence-box">
+                    <p class="instruction">Translate this sentence:</p>
+                    <h2 id="englishSentence" class="english-text">I am learning English</h2>
+                    <button class="btn-listen" onclick="speakSentence()"><i class="fa-solid fa-volume-high"></i> Listen</button>
+                </div>
+
+                <div class="options-grid" id="optionsGrid">
+                    <!-- Javascript will populate 4 multiple choice options here -->
+                </div>
+
+                <div id="feedbackBox" class="feedback-box hidden">
+                    <div class="feedback-icon" id="feedbackIcon"></div>
+                    <h3 id="feedbackText">Great Job!</h3>
+                    <button id="nextBtn" class="btn-primary">Next Sentence <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Level Success Screen -->
+        <main id="successScreen" class="screen glass-panel victory-panel text-center hidden">
+            <i class="fa-solid fa-trophy victory-icon"></i>
+            <h2>Level Complete!</h2>
+            <p>You have mastered 100 sentences!</p>
+            <div class="victory-score">+<span id="victoryScore">1000</span> XP</div>
+            <button class="btn-primary btn-large" onclick="goBack()">Continue Journey</button>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="sentences.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
