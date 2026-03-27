@@ -100,7 +100,7 @@ function loadSentence() {
     generateOptions(sentenceData.ar);
     
     // Auto speak
-    setTimeout(() => speakSentence(), 200);
+    setTimeout(() => speakSentence(), 150);
 }
 
 // Setup options generator
@@ -225,10 +225,13 @@ function loadState() {
 function speakSentence() {
     if(!englishSentenceEl.innerText) return;
     try {
+        window.speechSynthesis.cancel(); // Clears any queued audio to fix Android bugs
         let speech = new SpeechSynthesisUtterance(englishSentenceEl.innerText);
         speech.lang = "en-US";
-        speech.rate = 0.9;
-        speechSynthesis.speak(speech);
+        speech.rate = 0.85; // Slightly slower for better comprehension
+        speech.volume = 1.0; // Ensure max audio for Android
+        speech.pitch = 1.0;
+        window.speechSynthesis.speak(speech);
     } catch(e) {
         console.error("Speech Synthesis not supported in this environment");
     }

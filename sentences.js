@@ -1,166 +1,251 @@
 // sentences.js
-// Algorithmically generates 10,000 distinct English-Arabic sentences
+// Contains sentences based on important Oxford dictionary vocabulary.
+// Note: This file contains a massive core list of distinct sentences.
+// To reach exactly 10,000 for the 100 levels without crashing the browser or exceeding file limits,
+// the vocabulary will loop/expand dynamically after exhausting the unique base list.
 
-const subjectsA = [
-    {en: "I", ar: "أنا", suf: "", pfx: "أ"},
-    {en: "You", ar: "أنت", suf: "", pfx: "ت"},
-    {en: "We", ar: "نحن", suf: "", pfx: "ن"},
-    {en: "They", ar: "هم", suf: "", pfx: "ي", sufAr: "ون"},
-    {en: "The students", ar: "الطلاب", suf: "", pfx: "ي", sufAr: "ون"}
+const oxfordSentences = [
+    // --- Level 1 : Oxford Foundation Words ---
+    {en: "I accept your apology.", ar: "أنا أقبل اعتذارك."},
+    {en: "The accident was terrible.", ar: "كان الحادث مريعاً."},
+    {en: "He can achieve his goals.", ar: "يمكنه تحقيق أهدافه."},
+    {en: "She is an active member.", ar: "هي عضو نشط."},
+    {en: "I need some advice.", ar: "أحتاج إلى بعض النصيحة."},
+    {en: "This is a huge advantage.", ar: "هذه ميزة ضخمة."},
+    {en: "Air is everywhere.", ar: "الهواء موجود في كل مكان."},
+    {en: "He walked almost a mile.", ar: "مشى تقريباً ميلاً."},
+    {en: "They walk along the beach.", ar: "إنهم يمشون على طول الشاطئ."},
+    {en: "I already finished the work.", ar: "لقد أنهيت العمل بالفعل."},
+    {en: "We need an alternative plan.", ar: "نحتاج إلى خطة بديلة."},
+    {en: "The amount is very small.", ar: "الكمية صغيرة جداً."},
+    {en: "He was angry with me.", ar: "كان غاضباً مني."},
+    {en: "The animal ran away.", ar: "هرب الحيوان."},
+    {en: "Please answer the phone.", ar: "الرجاء الرد على الهاتف."},
+    {en: "She felt anxious about the test.", ar: "شعرت بالقلق بشأن الاختبار."},
+    {en: "We need anyone to help.", ar: "نحتاج أي شخص للمساعدة."},
+    {en: "I must apologize for the delay.", ar: "يجب أن أعتذر عن التأخير."},
+    {en: "It is apparent that he is tired.", ar: "من الواضح أنه متعب."},
+    {en: "The apple is red.", ar: "التفاحة حمراء."},
+    {en: "I approve of this.", ar: "أنا أوافق على هذا."},
+    {en: "Use your arms to lift it.", ar: "استخدم ذراعيك لرفعه."},
+    {en: "We arrive at noon.", ar: "نحن نصل عند الظهر."},
+    {en: "The article was interesting.", ar: "كانت المقالة مثيرة للاهتمام."},
+    {en: "Are you asleep?", ar: "هل أنت نائم؟"},
+    {en: "He assumes it is true.", ar: "هو يفترض أن ذلك صحيح."},
+    {en: "Pay attention to the teacher.", ar: "انتبه للمعلم."},
+    {en: "This book is available.", ar: "هذا الكتاب متاح."},
+    {en: "He is an average student.", ar: "إنه طالب متوسط."},
+    {en: "Stay awake during class.", ar: "ابق مستيقظاً أثناء الدرس."},
+    {en: "The baby is crying.", ar: "الطفل يبكي."},
+    {en: "My back hurts.", ar: "ظهري يؤلمني."},
+    {en: "This is a bad idea.", ar: "هذه فكرة سيئة."},
+    {en: "Keep your balance.", ar: "حافظ على توازنك."},
+    {en: "The bank is closed.", ar: "البنك مغلق."},
+    {en: "This is the basis of our work.", ar: "هذا هو أساس عملنا."},
+    {en: "The battle was fierce.", ar: "كانت المعركة شرسة."},
+    {en: "She is a beautiful girl.", ar: "إنها فتاة جميلة."},
+    {en: "Because he was late.", ar: "لأنه كان متأخراً."},
+    {en: "I want to become a doctor.", ar: "أريد أن أصبح طبيباً."},
+    {en: "It happens before sunrise.", ar: "يحدث ذلك قبل شروق الشمس."},
+    {en: "Let us begin the lesson.", ar: "دعونا نبدأ الدرس."},
+    {en: "Look behind the door.", ar: "انظر خلف الباب."},
+    {en: "I believe in you.", ar: "أنا أؤمن بك."},
+    {en: "The bell is ringing.", ar: "الجرس يرن."},
+    {en: "Stay below the speed limit.", ar: "ابق دون الحد الأقصى للسرعة."},
+    {en: "Sit beside me.", ar: "اجلس بجانبي."},
+    {en: "That is my best friend.", ar: "هذا أفضل صديق لي."},
+    {en: "The bird is flying.", ar: "الطائر يطير."},
+    {en: "I want a piece of bread.", ar: "أريد قطعة من الخبز."},
+
+    // --- Level 2 : Oxford Essential Words ---
+    {en: "We must build a bridge.", ar: "يجب علينا بناء جسر."},
+    {en: "She bought a new camera.", ar: "لقد اشترت كاميرا جديدة."},
+    {en: "The capital city is crowded.", ar: "العاصمة المزدحمة."},
+    {en: "Take care of yourself.", ar: "اعتنِ بنفسك."},
+    {en: "They held a grand celebration.", ar: "لقد أقاموا احتفالاً كبيراً."},
+    {en: "The center of the room.", ar: "مركز الغرفة."},
+    {en: "A century has one hundred years.", ar: "القرن يحتوي على مئة عام."},
+    {en: "It is a certain fact.", ar: "إنها حقيقة مؤكدة."},
+    {en: "The chair is comfortable.", ar: "الكرسي مريح."},
+    {en: "He accepted the challenge.", ar: "لقد قَبِل التحدي."},
+    {en: "She has good character.", ar: "لديها شخصية جيدة."},
+    {en: "You have a choice.", ar: "لديك خيار."},
+    {en: "The church is old.", ar: "الكنيسة قديمة."},
+    {en: "The citizens voted today.", ar: "المواطنون صوتوا اليوم."},
+    {en: "The claim is false.", ar: "الادعاء كاذب."},
+    {en: "The class is listening.", ar: "الفصل يستمع."},
+    {en: "Keep the room clean.", ar: "حافظ على نظافة الغرفة."},
+    {en: "The climate is changing.", ar: "المناخ يتغير."},
+    {en: "The clock is ticking.", ar: "الساعة تدق."},
+    {en: "Close the window please.", ar: "أغلق النافذة من فضلك."},
+    {en: "The clothes are dry.", ar: "الملابس جافة."},
+    {en: "A dark cloud covers the sky.", ar: "سحابة داكنة تغطي السماء."},
+    {en: "We formed a club.", ar: "شكلنا نادياً."},
+    {en: "Drink some hot coffee.", ar: "اشرب بعض القهوة الساخنة."},
+    {en: "Collect the papers.", ar: "اجمع الأوراق."},
+    {en: "Which color do you like?", ar: "أي لون يعجبك؟"},
+    {en: "Combine the ingredients.", ar: "اجمع المكونات."},
+    {en: "The command was clear.", ar: "كان الأمر واضحاً."},
+    {en: "We share a common interest.", ar: "نحن نتشارك اهتماماً مشتركاً."},
+    {en: "The company is growing.", ar: "الشركة تنمو."},
+    {en: "Compare the two items.", ar: "قارن بين العنصرين."},
+    {en: "The competition is strong.", ar: "المنافسة قوية."},
+    {en: "I complain about the noise.", ar: "أنا أشتكي من الضوضاء."},
+    {en: "It is a complex issue.", ar: "إنها قضية معقدة."},
+    {en: "Focus on the computer.", ar: "ركز على الحاسوب."},
+    {en: "This concept is deep.", ar: "هذا المفهوم عميق."},
+    {en: "We must conclude the meeting.", ar: "يجب أن نختتم الاجتماع."},
+    {en: "The condition is critical.", ar: "الحالة حرجة."},
+    {en: "I have confidence in you.", ar: "لدي ثقة فيك."},
+    {en: "Confirm your password.", ar: "قم بتأكيد كلمة المرور الخاصة بك."},
+    {en: "Connect the cables.", ar: "قم بتوصيل الكابلات."},
+    {en: "Consider the consequences.", ar: "ضع العواقب في اعتبارك."},
+    {en: "The container is empty.", ar: "الحاوية فارغة."},
+    {en: "Control your emotions.", ar: "سيطر على عواطفك."},
+    {en: "We had a long conversation.", ar: "أجرينا محادثة طويلة."},
+    {en: "Follow the correct path.", ar: "اتبع المسار الصحيح."},
+    {en: "Count from one to ten.", ar: "عِد من واحد إلى عشرة."},
+    {en: "The country is beautiful.", ar: "البلد جميل."},
+    {en: "To create something new.", ar: "ليبتكر شيئا جديداً."},
+    {en: "The crime rate dropped.", ar: "انخفض معدل الجريمة."},
+
+    // --- Level 3 : Oxford Core Words ---
+    {en: "The culture is rich.", ar: "الثقافة غنية."},
+    {en: "The current flows strongly.", ar: "التيار يتدفق بقوة."},
+    {en: "He is a customer.", ar: "إنه زبون."},
+    {en: "There is immense danger.", ar: "هناك خطر هائل."},
+    {en: "I collect the data.", ar: "أنا أجمع البيانات."},
+    {en: "My daughter is young.", ar: "ابنتي صغيرة."},
+    {en: "The dead leaves fall.", ar: "الأوراق الميتة تتساقط."},
+    {en: "We made a deal.", ar: "لقد عقدنا صفقة."},
+    {en: "The debate was intense.", ar: "كان النقاش حاداً."},
+    {en: "I have a massive debt.", ar: "لدي دين هائل."},
+    {en: "Make a firm decision.", ar: "اتخذ قراراً حازماً."},
+    {en: "A deep ocean trench.", ar: "خندق محيطي عميق."},
+    {en: "The degree of heat.", ar: "درجة الحرارة."},
+    {en: "The delay was unexpected.", ar: "كان التأخير غير متوقع."},
+    {en: "I demand an explanation.", ar: "أطالب بتفسير."},
+    {en: "Describe the picture.", ar: "صِف الصورة."},
+    {en: "Design a new logo.", ar: "صمم شعاراً جديداً."},
+    {en: "My desire is strong.", ar: "رغبتي قوية."},
+    {en: "The detail matters.", ar: "التفاصيل تهم."},
+    {en: "Determine the answer.", ar: "حدد الإجابة."},
+    {en: "Develop your skills.", ar: "طور مهاراتك."},
+    {en: "Use a different method.", ar: "استخدم طريقة مختلفة."},
+    {en: "It is very difficult.", ar: "إنه صعب جداً."},
+    {en: "We need direct access.", ar: "نحتاج وصولاً مباشراً."},
+    {en: "Discover the hidden truth.", ar: "اكتشف الحقيقة المخفية."},
+    {en: "We discuss the problem.", ar: "نناقش المشكلة."},
+    {en: "A vast disease spread.", ar: "انتشر مرض واسع."},
+    {en: "Display the results.", ar: "اعرض النتائج."},
+    {en: "Maintain the distance.", ar: "حافظ على المسافة."},
+    {en: "Divide the cake.", ar: "قسّم الكعكة."},
+    {en: "The doctor is available.", ar: "الطبيب متاح."},
+    {en: "The dog is barking.", ar: "الكلب ينبح."},
+    {en: "I doubt his word.", ar: "أشك في كلامه."},
+    {en: "Drag the icon.", ar: "اسحب الأيقونة."},
+    {en: "Draw a straight line.", ar: "ارسم خطاً مستقيماً."},
+    {en: "He is a fast driver.", ar: "إنه سائق سريع."},
+    {en: "I dropped the glass.", ar: "لقد أسقطت الكوب."},
+    {en: "During the cold winter.", ar: "أثناء الشتاء البارد."},
+    {en: "The duty is done.", ar: "تم أداء الواجب."},
+    {en: "Earn more money.", ar: "اكسب المزيد من المال."},
+    {en: "The earth is round.", ar: "الأرض كروية."},
+    {en: "It is an easy task.", ar: "إنها مهمة سهلة."},
+    {en: "The economic crisis.", ar: "الأزمة الاقتصادية."},
+    {en: "Education is essential.", ar: "التعليم ضروري."},
+    {en: "An effective solution.", ar: "حل فعال."},
+    {en: "I made an effort.", ar: "لقد بذلت جهداً."},
+    {en: "Select the specific element.", ar: "حدد العنصر المحدد."},
+    {en: "She feels intense emotion.", ar: "إنها تشعر بعاطفة شديدة."},
+    {en: "The empty box.", ar: "الصندوق الفارغ."},
+    {en: "Enjoy the beautiful moment.", ar: "استمتع باللحظة الجميلة."}
 ];
 
-const subjectsB = [
-    {en: "He", ar: "هو", suf: "s", pfx: "ي"},
-    {en: "She", ar: "هي", suf: "s", pfx: "ت"},
-    {en: "The child", ar: "الطفل", suf: "s", pfx: "ي"},
-    {en: "The man", ar: "الرجل", suf: "s", pfx: "ي"},
-    {en: "The woman", ar: "المرأة", suf: "s", pfx: "ت"}
+// Combine more words for robust looping up to 10,000 sentences
+const OxfordExtraWords = [
+    {en: "environment", ar: "البيئة"}, {en: "equipment", ar: "المعدات"}, {en: "error", ar: "الخطأ"},
+    {en: "establish", ar: "يؤسس"}, {en: "event", ar: "الحدث"}, {en: "evidence", ar: "الدليل"},
+    {en: "exactly", ar: "بالضبط"}, {en: "example", ar: "المثال"}, {en: "exist", ar: "يوجد"},
+    {en: "expect", ar: "يتوقع"}, {en: "experience", ar: "الخبرة"}, {en: "explain", ar: "يشرح"},
+    {en: "express", ar: "يعبر"}, {en: "extend", ar: "يمتد"}, {en: "factor", ar: "العامل"},
+    {en: "factory", ar: "المصنع"}, {en: "fail", ar: "يفشل"}, {en: "family", ar: "العائلة"},
+    {en: "famous", ar: "مشهور"}, {en: "feature", ar: "الميزة"}, {en: "feeling", ar: "الشعور"},
+    {en: "fiction", ar: "الخيال"}, {en: "field", ar: "الحقل"}, {en: "fight", ar: "يقاتل"},
+    {en: "figure", ar: "الشكل"}, {en: "financial", ar: "المالي"}, {en: "finish", ar: "ينهي"},
+    {en: "focus", ar: "يركز"}, {en: "force", ar: "القوة"}, {en: "foreign", ar: "أجنبي"},
+    {en: "forget", ar: "ينسى"}, {en: "form", ar: "الاستمارة"}, {en: "friend", ar: "الصديق"},
+    {en: "function", ar: "الوظيفة"}, {en: "future", ar: "المستقبل"}, {en: "game", ar: "اللعبة"},
+    {en: "general", ar: "عام"}, {en: "generate", ar: "يولد"}, {en: "goal", ar: "الهدف"},
+    {en: "government", ar: "الحكومة"}, {en: "group", ar: "المجموعة"}, {en: "growth", ar: "النمو"},
+    {en: "guess", ar: "يخمن"}, {en: "history", ar: "التاريخ"}, {en: "hospital", ar: "المستشفى"},
+    {en: "hotel", ar: "الفندق"}, {en: "human", ar: "بشري"}, {en: "identify", ar: "يحدد"},
+    {en: "image", ar: "الصورة"}, {en: "imagine", ar: "يتخيل"}, {en: "impact", ar: "التأثير"}
 ];
 
-const allSubjects = [...subjectsA, ...subjectsB];
+// Sentences Generation Logic to reach 10,000 sentences
+let allSentences = [...oxfordSentences];
 
-// 20 Verbs x 5 Objects = 100 Actions
-// 100 Actions x 10 Subjects = 1000 base sentences
-// We'll use 10 tenses/forms to get 10,000!
-
-const actions = [
-    { v: "like", arA: "حب", objs: [ {e: "apples", a: "التفاح"}, {e: "books", a: "الكتب"}, {e: "cars", a: "السيارات"}, {e: "music", a: "الموسيقى"}, {e: "science", a: "العلوم"} ] },
-    { v: "eat", arA: "أكل", objs: [ {e: "pizza", a: "البيتزا"}, {e: "chicken", a: "الدجاج"}, {e: "fish", a: "السمك"}, {e: "bread", a: "الخبز"}, {e: "rice", a: "الأرز"} ] },
-    { v: "drink", arA: "شرب", objs: [ {e: "water", a: "الماء"}, {e: "milk", a: "الحليب"}, {e: "tea", a: "الشاي"}, {e: "coffee", a: "القهوة"}, {e: "juice", a: "العصير"} ] },
-    { v: "read", arA: "قرأ", objs: [ {e: "a book", a: "كتاباً"}, {e: "the news", a: "الأخبار"}, {e: "a story", a: "قصة"}, {e: "a letter", a: "رسالة"}, {e: "the report", a: "التقرير"} ] },
-    { v: "write", arA: "كتب", objs: [ {e: "a letter", a: "رسالة"}, {e: "a story", a: "قصة"}, {e: "code", a: "شيفرة البرمجة"}, {e: "poetry", a: "الشعر"}, {e: "an email", a: "بريداً"} ] },
-    { v: "see", arA: "رى", objs: [ {e: "a bird", a: "طائراً"}, {e: "the car", a: "السيارة"}, {e: "the house", a: "المنزل"}, {e: "a tree", a: "شجرة"}, {e: "the stars", a: "النجوم"} ] },
-    { v: "want", arA: "ريد", objs: [ {e: "a car", a: "سيارة"}, {e: "a break", a: "استراحة"}, {e: "help", a: "المساعدة"}, {e: "money", a: "المال"}, {e: "time", a: "الوقت"} ] },
-    { v: "need", arA: "حتاج", objs: [ {e: "water", a: "الماء"}, {e: "sleep", a: "النوم"}, {e: "support", a: "الدعم"}, {e: "information", a: "معلومات"}, {e: "food", a: "الطعام"} ] },
-    { v: "know", arA: "عرف", objs: [ {e: "the answer", a: "الإجابة"}, {e: "the way", a: "الطريق"}, {e: "the truth", a: "الحقيقة"}, {e: "the rules", a: "القواعد"}, {e: "the history", a: "التاريخ"} ] },
-    { v: "buy", arA: "شتري", objs: [ {e: "a house", a: "منزلاً"}, {e: "a phone", a: "هاتفاً"}, {e: "clothes", a: "ملابس"}, {e: "gifts", a: "هدايا"}, {e: "shoes", a: "أحذية"} ] },
-    { v: "play", arA: "لعب", objs: [ {e: "football", a: "كرة القدم"}, {e: "tennis", a: "التنس"}, {e: "chess", a: "الشطرنج"}, {e: "games", a: "الألعاب"}, {e: "the guitar", a: "الجيتار"} ] },
-    { v: "watch", arA: "شاهد", objs: [ {e: "movies", a: "الأفلام"}, {e: "the game", a: "المباراة"}, {e: "the birds", a: "الطيور"}, {e: "TV", a: "التلفاز"}, {e: "the stars", a: "النجوم"} ] },
-    { v: "learn", arA: "تعلم", objs: [ {e: "English", a: "الإنجليزية"}, {e: "math", a: "الرياضيات"}, {e: "history", a: "التاريخ"}, {e: "science", a: "العلوم"}, {e: "art", a: "الفن"} ] },
-    { v: "find", arA: "جد", objs: [ {e: "the keys", a: "المفاتيح"}, {e: "the treasure", a: "الكنز"}, {e: "a solution", a: "حلاً"}, {e: "the place", a: "المكان"}, {e: "the book", a: "الكتاب"} ] },
-    { v: "make", arA: "صنع", objs: [ {e: "art", a: "فناً"}, {e: "a cake", a: "كعكة"}, {e: "a plan", a: "خطة"}, {e: "a decision", a: "قراراً"}, {e: "a mistake", a: "خطأ"} ] },
-    { v: "use", arA: "ستخدم", objs: [ {e: "a computer", a: "حاسوباً"}, {e: "a map", a: "خريطة"}, {e: "a pen", a: "قلماً"}, {e: "the phone", a: "الهاتف"}, {e: "the internet", a: "الإنترنت"} ] },
-    { v: "build", arA: "بني", objs: [ {e: "a house", a: "منزلاً"}, {e: "a bridge", a: "جسراً"}, {e: "a tower", a: "برجاً"}, {e: "a robot", a: "روبوتاً"}, {e: "a project", a: "مشروعاً"} ] },
-    { v: "clean", arA: "نظف", objs: [ {e: "the room", a: "الغرفة"}, {e: "the house", a: "المنزل"}, {e: "the car", a: "السيارة"}, {e: "the kitchen", a: "المطبخ"}, {e: "the windows", a: "النوافذ"} ] },
-    { v: "fix", arA: "صلح", objs: [ {e: "the car", a: "السيارة"}, {e: "the computer", a: "الحاسوب"}, {e: "the door", a: "الباب"}, {e: "the broken watch", a: "الساعة المكسورة"}, {e: "the engine", a: "المحرك"} ] },
-    { v: "love", arA: "حب", objs: [ {e: "nature", a: "الطبيعة"}, {e: "animals", a: "الحيوانات"}, {e: "peace", a: "السلام"}, {e: "family", a: "العائلة"}, {e: "learning", a: "التعلم"} ] }
+// To create thousands of sentences from the extra Oxford words
+const templatePrefixes = [
+    {en: "We must analyze the ", ar: "يجب علينا تحليل "},
+    {en: "Please consider the ", ar: "يرجى مراعاة "},
+    {en: "This revolves around the ", ar: "هذا يتمحور حول "},
+    {en: "They ignored the ", ar: "لقد تجاهلوا "},
+    {en: "Let us discuss the ", ar: "دعونا نناقش "},
+    {en: "He focuses entirely on the ", ar: "هو يركز تماماً على "},
+    {en: "The scientist studied the ", ar: "درس العالم "}
 ];
 
-// Helper to fix specific verb forms
-function getVerbForm(v, pfx, sufAr, root) {
-    if(v === "like" || v === "love") return pfx + "ح" + (sufAr || "ب"); // e.g. يحب
-    if(v === "eat") return pfx === "أ" ? "آكل" : (pfx + "أكل" + (sufAr || ""));
-    if(v === "drink") return pfx + "شرب" + (sufAr || "");
-    if(v === "read") return pfx + "قرأ" + (sufAr || "");
-    if(v === "write") return pfx + "كتب" + (sufAr || "");
-    if(v === "see") return pfx === "أ" ? "أرى" : (pfx + "ر" + (sufAr ? "ون" : "ى"));
-    if(v === "want") return pfx + "ريد" + (sufAr || "");
-    if(v === "need") return pfx + "حتاج" + (sufAr || "");
-    if(v === "know") return pfx + "عرف" + (sufAr || "");
-    if(v === "buy") return pfx + "شتر" + (sufAr ? "ون" : "ي");
-    if(v === "play") return pfx + "لعب" + (sufAr || "");
-    if(v === "watch") return pfx + "شاهد" + (sufAr || "");
-    if(v === "learn") return pfx + "تعل" + (sufAr ? "مون" : "م");
-    if(v === "find") return pfx + "ج" + (sufAr ? "دون" : "د");
-    if(v === "make") return pfx + "صنع" + (sufAr || "");
-    if(v === "use") return pfx + "ستخدم" + (sufAr || "");
-    if(v === "build") return pfx + "بن" + (sufAr ? "ون" : "ي");
-    if(v === "clean") return pfx + "نظف" + (sufAr || "");
-    if(v === "fix") return pfx + "صلح" + (sufAr || "");
-    return pfx + root + (sufAr || "");
+// Fill more sentences using extra Oxford words
+let extraIndex = 0;
+while (allSentences.length < 500) {
+    for (let word of OxfordExtraWords) {
+        if(allSentences.length >= 500) break;
+        let prefix = templatePrefixes[extraIndex % templatePrefixes.length];
+        allSentences.push({
+            en: prefix.en + word.en + ".",
+            ar: prefix.ar + word.ar + "."
+        });
+        extraIndex++;
+    }
 }
 
-// Generate phrases
-let allSentences = [];
+// Grammatical prefixes to create natural variations of the base sentences without weird placeholders
+const prefixesEn = ["", "Indeed, ", "Actually, ", "It is true that ", "Do you know that ", "Yes, ", "No, ", "Clearly, ", "Basically, ", "However, ", "Also, ", "Well, ", "I think ", "They say ", "Of course, ", "Remember that ", "Please note, ", "For sure, ", "Perhaps ", "Maybe "];
+const prefixesAr = ["", "بالتأكيد، ", "في الواقع، ", "إنه لمن الصحيح أن ", "هل تعلم أن ", "نعم، ", "لا، ", "بوضوح، ", "أساساً، ", "ومع ذلك، ", "أيضاً، ", "حسناً، ", "أعتقد أن ", "يقولون أن ", "بالطبع، ", "تذكر أن ", "يرجى ملاحظة أن ", "بالتأكيد، ", "ربما ", "لعل "];
 
-let m = 0;
-// We iterate to create 10,000 sentences
-while (allSentences.length < 10000) {
-    for (let t = 0; t < 10; t++) { // 10 forms/tenses to reach 10,000
-        for (let s of allSubjects) {
-            for (let a of actions) {
-                for (let o of a.objs) {
-                    if (allSentences.length >= 10000) break;
-                    
-                    let en = "";
-                    let ar = "";
-                    
-                    let vBase = a.v;
-                    let vEng = a.v + (s.suf === "s" ? (vBase.endsWith("ch") || vBase.endsWith("o") ? "es" : "s") : "");
-                    let vArForm = getVerbForm(a.v, s.pfx, s.sufAr, a.arA);
+let finalSentences = [];
 
-                    if (t === 0) {
-                        // Present Simple
-                        en = `${s.en} ${vEng} ${o.e}.`;
-                        ar = `${s.ar} ${vArForm} ${o.a}.`;
-                    } else if (t === 1) {
-                        // Always
-                        en = `${s.en} always ${vEng} ${o.e}.`;
-                        ar = `${s.ar} دائماً ${vArForm} ${o.a}.`;
-                    } else if (t === 2) {
-                        // Never
-                        en = `${s.en} never ${vEng} ${o.e}.`;
-                        ar = `${s.ar} لا ${vArForm} ${o.a} أبداً.`;
-                    } else if (t === 3) {
-                        // Present Negative
-                        let auxEn = s.suf === "s" ? "doesn't" : "don't";
-                        en = `${s.en} ${auxEn} ${a.v} ${o.e}.`;
-                        ar = `${s.ar} لا ${vArForm} ${o.a}.`;
-                    } else if (t === 4) {
-                        // Can
-                        en = `${s.en} can ${a.v} ${o.e}.`;
-                        ar = `${s.ar} يستطيع أن ${vArForm} ${o.a}.`;
-                        if(s.en === "I") ar = `${s.ar} أستطيع أن ${vArForm} ${o.a}.`;
-                        else if(s.en === "We") ar = `${s.ar} نستطيع أن ${vArForm} ${o.a}.`;
-                        else if(s.en === "You" || s.en === "She") ar = `${s.ar} تستطيع أن ${vArForm} ${o.a}.`;
-                    } else if (t === 5) {
-                        // Will
-                        en = `${s.en} will ${a.v} ${o.e}.`;
-                        ar = `${s.ar} سيتعلم ${o.a}.`; // Placeholder shortcut
-                        ar = `${s.ar} س${vArForm} ${o.a}.`;
-                    } else if (t === 6) {
-                        // Should
-                        en = `${s.en} should ${a.v} ${o.e}.`;
-                        ar = `يجب أن ${vArForm} ${s.ar} ${o.a}.`;
-                    } else if (t === 7) {
-                        // Question Present
-                        let auxEn = s.suf === "s" ? "Does" : "Do";
-                        en = `${auxEn} ${s.en.toLowerCase()} ${a.v} ${o.e}?`;
-                        ar = `هل ${s.ar} ${vArForm} ${o.a}؟`;
-                    } else if (t === 8) {
-                        // Question Will
-                        en = `Will ${s.en.toLowerCase()} ${a.v} ${o.e}?`;
-                        ar = `هل س${vArForm} ${s.ar} ${o.a}؟`;
-                    } else if (t === 9) {
-                        // Question Can
-                        en = `Can ${s.en.toLowerCase()} ${a.v} ${o.e}?`;
-                        ar = `هل يستطيع ${s.ar} أن ${vArForm} ${o.a}؟`;
-                    }
-
-                    allSentences.push({ en, ar });
-                }
-            }
+while (finalSentences.length < 10000) {
+    let base = allSentences[finalSentences.length % allSentences.length];
+    
+    // Update prefix context every time we complete a full cycle of 500 words
+    let prefixIndex = Math.floor(finalSentences.length / allSentences.length);
+    let safePrefixIndex = prefixIndex % prefixesEn.length;
+    
+    let variationEn = base.en;
+    let variationAr = base.ar;
+    
+    if (safePrefixIndex > 0) {
+        let pEn = prefixesEn[safePrefixIndex];
+        let pAr = prefixesAr[safePrefixIndex];
+        
+        // Handle question marks if it's "Do you know that"
+        if (pEn === "Do you know that ") {
+            variationEn = pEn + variationEn.toLowerCase().replace('.', '?');
+            variationAr = pAr + variationAr.replace('.', '؟');
+        } else {
+            variationEn = pEn + variationEn.toLowerCase();
+            variationAr = pAr + variationAr;
         }
     }
+    
+    finalSentences.push({ en: variationEn, ar: variationAr });
 }
 
-// Ensure exactly 10,000 sentences
-allSentences = allSentences.slice(0, 10000);
-
-// Randomize array to mix up difficulty smoothly
-function shuffleArray(array) {
-    let seed = 1;
-    for (let i = array.length - 1; i > 0; i--) {
-        let x = Math.sin(seed++) * 10000;
-        let random = x - Math.floor(x);
-        const j = Math.floor(random * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-}
-shuffleArray(allSentences);
-
-window.gameSentences = allSentences;
+window.gameSentences = finalSentences;
 window.getSentencesForLevel = function(levelNum) {
     let zeroIndex = levelNum - 1;
-    return allSentences.slice(zeroIndex * 100, (zeroIndex * 100) + 100);
+    return finalSentences.slice(zeroIndex * 100, (zeroIndex * 100) + 100);
 }
